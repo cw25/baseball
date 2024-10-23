@@ -1,0 +1,7 @@
+Data files found in the `public/db` directory are converted from files found at retrosheet.org with the following attribution:
+
+```
+The information used here was obtained free of charge from and is copyrighted by Retrosheet. Interested parties may contact Retrosheet at "www.retrosheet.org".
+```
+
+All other code and file assets within this repository are proprietary and confidential.
