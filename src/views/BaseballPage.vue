@@ -12,5 +12,4 @@ const state = reactive({
 });
 
 state.pCount = await fetchPlaysCount();
-console.log(state.playCount);
 </script>

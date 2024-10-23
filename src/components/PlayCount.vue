@@ -3,7 +3,6 @@
 </template>
 
 <script setup>
-console.log("PlayCount component loaded");
 import { reactive } from "vue";
 
 const props = defineProps({
