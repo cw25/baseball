@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <Suspense>
-      <RouterView />
+      <PageContainer />
       <template #fallback>
         Loading...
       </template>
@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-import { RouterView } from "vue-router";
+import PageContainer from "@/components/PageContainer.vue";
 </script>

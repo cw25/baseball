@@ -1,15 +1,25 @@
 <template>
-  <PlayCount :play-count="state.pCount" />
+  <ul>
+    <li>
+      <router-link
+          :to="{
+            name: 'plays_count',
+          }"
+        >
+        Plays Count (demo)
+      </router-link>
+    </li>
+    <li>
+      <router-link
+          :to="{
+            name: 'player_search',
+          }"
+        >
+        Player Search
+      </router-link>
+    </li>
+  </ul>
 </template>
 
 <script setup>
-import { reactive } from "vue";
-import { fetchPlaysCount } from "@/common/plays.js";
-import PlayCount from '@/components/PlayCount.vue';
-
-const state = reactive({
-  pCount: { type: Number },
-});
-
-state.pCount = await fetchPlaysCount();
 </script>

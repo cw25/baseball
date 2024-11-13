@@ -1,4 +1,4 @@
-import { db, conn } from "./database.js";
+import { conn } from "./database.js";
 
 export const fetchPlaysCount = async () => {
   let res = await genericQuery(
@@ -7,7 +7,14 @@ export const fetchPlaysCount = async () => {
   return res[0].plays_count;
 };
 
+
+export const searchPlayers = async (searchTerm) => {
+  let res = await genericQuery("SELECT * FROM read_parquet('players_file') WHERE last ILIKE '%" + searchTerm + "%' OR first LIKE '%" + searchTerm + "%'");
+  return res;
+};
+
 const genericQuery = async (sql) => {
+  console.log(sql);
   let q = await conn.query(sql);
   let results = await q.toArray().map((row) => row.toJSON());
   return results;

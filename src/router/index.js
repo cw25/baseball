@@ -5,8 +5,18 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "base",
+      name: "home",
       component: () => import("../views/BaseballPage.vue"),
+    },
+    {
+      path: "/plays_count",
+      name: "plays_count",
+      component: () => import("../views/PlaysCount.vue"),
+    },
+    {
+      path: "/player_search",
+      name: "player_search",
+      component: () => import("../views/PlayerSearch.vue"),
     },
   ],
 });
