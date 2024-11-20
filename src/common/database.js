@@ -50,8 +50,8 @@ const initDBSchema = async(db) => {
     // const fieldingRes = await fetch('/db/fielding.parquet');
     // await db.registerFileBuffer('fielding_file', new Uint8Array(await fieldingRes.arrayBuffer()));
 
-    // const gameinfoRes = await fetch('/db/gameinfo.parquet');
-    // await db.registerFileBuffer('gameinfo_file', new Uint8Array(await gameinfoRes.arrayBuffer()));
+    const gameinfoRes = await fetch('/db/gameinfo.parquet');
+    await db.registerFileBuffer('gameinfo_file', new Uint8Array(await gameinfoRes.arrayBuffer()));
 
     // const pitchingRes = await fetch('/db/pitching.parquet');
     // await db.registerFileBuffer('pitching_file', new Uint8Array(await pitchingRes.arrayBuffer()));

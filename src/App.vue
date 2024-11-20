@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div>
     <Suspense>
       <PageContainer />
       <template #fallback>
