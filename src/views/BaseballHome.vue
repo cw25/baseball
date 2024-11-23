@@ -3,10 +3,10 @@
     <li>
       <router-link
           :to="{
-            name: 'plays_count',
+            name: 'player_search',
           }"
         >
-        Plays Count (demo)
+        Players
       </router-link>
     </li>
     <li>
@@ -15,7 +15,15 @@
             name: 'player_search',
           }"
         >
-        Player Search
+        Teams
+      </router-link>
+    </li><li>
+      <router-link
+          :to="{
+            name: 'player_search',
+          }"
+        >
+        Today's Games
       </router-link>
     </li>
   </ul>

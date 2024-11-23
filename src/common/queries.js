@@ -9,7 +9,7 @@ export const fetchPlaysCount = async () => {
 
 export const searchPlayers = async (searchTerm) => {
   let res = await genericQuery(`
-    SELECT first, last, bat, throw, STRING_AGG(team, ', ' ORDER BY team) AS team, STRING_AGG(pos, ', ' ORDER BY pos) AS pos
+    SELECT id, first, last, bat, throw, STRING_AGG(team, ', ' ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ', ' ORDER BY pos) AS pos
     FROM read_parquet('players_file')
     WHERE (last ILIKE '%${searchTerm}%' OR first ILIKE '%${searchTerm}%')
     GROUP BY id, first, last, bat, throw
