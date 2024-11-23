@@ -1,11 +1,16 @@
 <template>
-<input class="p-1 w-full m-0" type="text" name="player_search" @change="search()" v-model="state.searchTerm">
+  <div class="">
+    <input class="p-1 w-full m-0" type="text" name="player_search" @change="search()" v-model="state.searchTerm">
 
-<div class="mt-6">
-  <div v-for="player in state.results" :key="player.id">
-    <PlayerListRow :player="player" />
+    <div class="mt-6">
+      <div v-for="player in state.results" :key="player.id">
+        <PlayerListRow :player="player" />
+      </div>
+    </div>
+
+    <div v-if="state.results?.length > 0" class="h-24">
+    </div>
   </div>
-</div>
 </template>
 
 
