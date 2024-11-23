@@ -12,8 +12,20 @@ export const searchPlayers = async (searchTerm) => {
     SELECT id, first, last, bat, throw, STRING_AGG(team, ', ' ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ', ' ORDER BY pos) AS pos
     FROM read_parquet('players_file')
     WHERE (last ILIKE '%${searchTerm}%' OR first ILIKE '%${searchTerm}%')
+      AND team NOT IN ('ALS', 'NLS')
     GROUP BY id, first, last, bat, throw
     ORDER BY last, first
+  `);
+  return res;
+};
+
+export const playerByID = async (playerID) => {
+  let res = await genericQuery(`
+    SELECT id, first, last, bat, throw, STRING_AGG(team, ', ' ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ', ' ORDER BY pos) AS pos
+    FROM read_parquet('players_file')
+    WHERE id = '${playerID}'
+      AND team NOT IN ('ALS', 'NLS')
+    GROUP BY id, first, last, bat, throw
   `);
   return res;
 };
@@ -46,9 +58,9 @@ export const playerStatsByID = async (playerID) => {
       SUM(k)::int AS SO,
       NULL AS SB, -- player is not the batter here, sim to runs
       NULL AS CS, -- player is not the batter here, sim to runs
-      SUM(single + double + triple + hr)::int / SUM(ab)::int AS AVG,
-      SUM(single + double + triple + hr + walk)::int / SUM(ab)::int AS OBP,
-      SUM(single + (double * 2) + (triple * 3) + (hr * 4))::int / SUM(ab)::int AS SLG,
+      ROUND(SUM(single + double + triple + hr)::int / SUM(ab)::int, 3) AS AVG,
+      ROUND(SUM(single + double + triple + hr + walk)::int / SUM(ab)::int, 3) AS OBP,
+      ROUND(SUM(single + (double * 2) + (triple * 3) + (hr * 4))::int / SUM(ab)::int, 3) AS SLG,
       OBP + SLG AS OPS,
       NULL AS WAR -- ???????
     FROM read_parquet('plays_file')
