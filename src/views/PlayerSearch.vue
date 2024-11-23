@@ -1,18 +1,26 @@
 <template>
-Search...
-<input type="text" name="player_search" @change="search()" v-model="state.searchTerm">
+<input class="p-1 w-full m-0" type="text" name="player_search" @change="search()" v-model="state.searchTerm">
+
+<div class="mt-6">
+  <div v-for="player in state.results" :key="player.id">
+    <PlayerListRow :player="player" />
+  </div>
+</div>
 </template>
 
 
 <script setup>
 import { reactive } from 'vue';
 import { searchPlayers } from '../common/queries.js';
+import PlayerListRow from '@/components/PlayerListRow.vue';
 
-const state = reactive({ searchTerm: "" });
+const state = reactive({ searchTerm: "", results: [] });
 
 const search = async () => {
-  console.log("Searching", state.searchTerm);
-  let results = await searchPlayers(state.searchTerm);
-  console.log("Results", results);
+  if (!state.searchTerm || state.searchTerm == "") {
+    return [];
+  }
+
+  state.results = await searchPlayers(state.searchTerm);
 };
 </script>

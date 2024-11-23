@@ -8,26 +8,34 @@ export const fetchPlaysCount = async () => {
 };
 
 export const searchPlayers = async (searchTerm) => {
-  let res = await genericQuery("SELECT * FROM read_parquet('players_file') WHERE last ILIKE '%" + searchTerm + "%' OR first LIKE '%" + searchTerm + "%'");
+  let res = await genericQuery(`
+    SELECT first, last, bat, throw, STRING_AGG(team, ', ' ORDER BY team) AS team, STRING_AGG(pos, ', ' ORDER BY pos) AS pos
+    FROM read_parquet('players_file')
+    WHERE (last ILIKE '%${searchTerm}%' OR first ILIKE '%${searchTerm}%')
+    GROUP BY id, first, last, bat, throw
+    ORDER BY last, first
+  `);
   return res;
 };
 
-export const freddie = async () => {
+export const playerStatsByID = async (playerID) => {
   let res = await genericQuery(`
-    WITH regular_season_games AS (
-      SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
-    )
+    WITH
+      regular_season_games AS (
+        SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
+      ),
+      player_runs AS (
+        SELECT COUNT(*) AS player_runs
+        FROM read_parquet('plays_file')
+        WHERE
+          gid IN (SELECT gid FROM regular_season_games)
+          AND (run_b = '${playerID}' OR run1 = '${playerID}' OR run2 = '${playerID}' OR run3 = '${playerID}')
+      )
 
     SELECT
       COUNT(DISTINCT gid)::int AS GP,
       SUM(ab)::int AS AB,
-      (
-        SELECT COUNT(*)
-        FROM read_parquet('plays_file')
-        WHERE
-          gid IN (SELECT gid FROM regular_season_games)
-          AND (run_b = 'freef001' OR run1 = 'freef001' OR run2 = 'freef001' OR run3 = 'freef001')
-      )::int AS R,
+      (SELECT player_runs FROM player_runs)::int AS R,
       SUM(single + double + triple + hr)::int AS H,
       SUM(double)::int AS "2B",
       SUM(triple)::int AS "3B",
@@ -44,7 +52,7 @@ export const freddie = async () => {
       OBP + SLG AS OPS,
       NULL AS WAR -- ???????
     FROM read_parquet('plays_file')
-    WHERE batter = 'freef001'
+    WHERE batter = '${playerID}'
     AND gid IN (
       SELECT gid FROM regular_season_games
     )

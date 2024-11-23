@@ -4,7 +4,7 @@
 
 <script setup>
 import { reactive } from "vue";
-import { fetchPlaysCount, freddie } from "@/common/queries.js";
+import { fetchPlaysCount, playerStatsByID } from "@/common/queries.js";
 import PlayCount from '@/components/PlayCount.vue';
 
 const state = reactive({
@@ -12,5 +12,5 @@ const state = reactive({
 });
 
 state.pCount = await fetchPlaysCount();
-state.freddie = await freddie();
+state.freddie = await playerStatsByID('freef001');
 </script>
