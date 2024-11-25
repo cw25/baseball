@@ -8,7 +8,7 @@
 
   <div class="w-full text-lg font-bold mt-6">2023 Stats</div>
 
-  <div class="w-full grid grid-cols-4 mt-2">
+  <div class="w-full grid grid-cols-4 mt-2 font-mono">
     <div class="w-full text-left col-span-3">Games Played</div>
     <div class="w-full text-right col-span-1">{{ stats.GP }}</div>
 

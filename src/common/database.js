@@ -44,8 +44,8 @@ const initConn = async (db) => {
 
 const initDBSchema = async(db) => {
   try {
-    // const battingRes = await fetch('/db/batting.parquet');
-    // await db.registerFileBuffer('batting_file', new Uint8Array(await battingRes.arrayBuffer()));
+    const battingRes = await fetch('/db/batting.parquet');
+    await db.registerFileBuffer('batting_file', new Uint8Array(await battingRes.arrayBuffer()));
 
     // const fieldingRes = await fetch('/db/fielding.parquet');
     // await db.registerFileBuffer('fielding_file', new Uint8Array(await fieldingRes.arrayBuffer()));

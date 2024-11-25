@@ -32,39 +32,33 @@ export const playerByID = async (playerID) => {
 
 export const playerStatsByID = async (playerID) => {
   let res = await genericQuery(`
-    WITH
-      regular_season_games AS (
-        SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
-      ),
-      player_runs AS (
-        SELECT COUNT(*) AS player_runs
-        FROM read_parquet('plays_file')
-        WHERE
-          gid IN (SELECT gid FROM regular_season_games)
-          AND (run_b = '${playerID}' OR run1 = '${playerID}' OR run2 = '${playerID}' OR run3 = '${playerID}')
-      )
+    WITH regular_season_games AS (
+      SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
+    )
 
     SELECT
       COUNT(DISTINCT gid)::int AS GP,
-      SUM(ab)::int AS AB,
-      (SELECT player_runs FROM player_runs)::int AS R,
-      SUM(single + double + triple + hr)::int AS H,
-      SUM(double)::int AS "2B",
-      SUM(triple)::int AS "3B",
-      SUM(hr)::int AS HR,
-      SUM(rbi)::int AS RBI,
-      SUM(walk)::int AS BB,
-      SUM(hbp)::int AS HBP,
-      SUM(k)::int AS SO,
-      NULL AS SB, -- player is not the batter here, sim to runs
-      NULL AS CS, -- player is not the batter here, sim to runs
-      ROUND(SUM(single + double + triple + hr)::int / SUM(ab)::int, 3) AS AVG,
-      ROUND(SUM(single + double + triple + hr + walk)::int / SUM(ab)::int, 3) AS OBP,
-      ROUND(SUM(single + (double * 2) + (triple * 3) + (hr * 4))::int / SUM(ab)::int, 3) AS SLG,
-      OBP + SLG AS OPS,
-      NULL AS WAR -- ???????
-    FROM read_parquet('plays_file')
-    WHERE batter = '${playerID}'
+      SUM(b_ab)::int AS AB,
+      SUM(b_r)::int AS R,
+      SUM(b_h)::int AS H,
+      SUM(b_d)::int AS "2B",
+      SUM(b_t)::int AS "3B",
+      SUM(b_hr)::int AS HR,
+      SUM(b_rbi)::int AS RBI,
+      SUM(b_w)::int AS BB,
+      SUM(b_hbp)::int AS HBP,
+      SUM(b_k)::int AS SO,
+      SUM(b_sb)::int AS SB,
+      SUM(b_cs)::int AS CS,
+      ROUND(SUM(b_h)::int / SUM(b_ab)::int, 3) AS AVG,
+      ROUND(SUM(b_h + b_w + b_hbp)::int / SUM(b_ab + b_w + b_hbp + b_sf)::int, 3) AS OBP,
+      ROUND(SUM(b_h + b_d + (b_t * 2) + (b_hr * 3))::int / SUM(b_ab)::int, 3) AS SLG,
+      ROUND(
+        SUM(b_h + b_w + b_hbp)::int / SUM(b_ab + b_w + b_hbp + b_sf)::int
+        + SUM(b_h + b_d + (b_t * 2) + (b_hr * 3))::int / SUM(b_ab)::int, 3) AS OPS,
+      NULL AS WAR
+    FROM read_parquet('batting_file')
+    WHERE id = '${playerID}'
     AND gid IN (
       SELECT gid FROM regular_season_games
     )
@@ -73,7 +67,7 @@ export const playerStatsByID = async (playerID) => {
 }
 
 const genericQuery = async (sql) => {
-  console.log(sql);
+  // console.log(sql);
   let q = await conn.query(sql);
   let results = await q.toArray().map((row) => row.toJSON());
   return results;
