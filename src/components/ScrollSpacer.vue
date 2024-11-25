@@ -1,3 +1,3 @@
 <template>
-  <div class="h-24" />
+  <div class="h-16" />
 </template>
