@@ -21,7 +21,7 @@ export const searchPlayers = async (searchTerm) => {
 
 export const playerByID = async (playerID) => {
   let res = await genericQuery(`
-    SELECT id, first, last, bat, throw, STRING_AGG(team, ', ' ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ', ' ORDER BY pos) AS pos
+    SELECT id, first, last, bat, throw, ARRAY_AGG(team ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ', ' ORDER BY pos) AS pos
     FROM read_parquet('players_file')
     WHERE id = '${playerID}'
       AND team NOT IN ('ALS', 'NLS')
@@ -67,7 +67,6 @@ export const playerStatsByID = async (playerID) => {
 }
 
 const genericQuery = async (sql) => {
-  // console.log(sql);
   let q = await conn.query(sql);
   let results = await q.toArray().map((row) => row.toJSON());
   return results;

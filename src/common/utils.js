@@ -1,15 +1,14 @@
-export const teamName = (teamCode) => {
-  return teamCode;
-  // console.log(teamCode);
-  // const teamNameMap = {
-  //   "LAN": "Los Angeles Dodgers",
-  // };
+export function teamName(teamCode) {
+  console.log(teamCode);
+  const teamNameMap = {
+    "BOS": "Red Sox",
+    "LAN": "Dodgers",
+  };
 
-  // console.log(teamCode);
-  // if (~teamNameMap[teamCode]) {
-  //   return teamCode;
-  // }
+  if (!teamNameMap[teamCode]) {
+    return teamCode;
+  }
 
-  // console.log(teamCode);
-  // return teamNameMap[teamCode];
+  console.log(teamNameMap[teamCode]);
+  return teamNameMap[teamCode];
 };

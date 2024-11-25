@@ -3,7 +3,7 @@
     {{ player.first }} {{ player.last }}
   </div>
   <div class="w-full text-left text-xl font-bold">
-    {{ player.pos }} - {{ teamName[player.team] }}
+    {{ player.pos }} - {{ teamNames() }}
   </div>
 
   <div class="w-full text-lg font-bold mt-6">2023 Stats</div>
@@ -69,7 +69,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { playerByID, playerStatsByID } from '../common/queries.js';
-import { teamName } from '@/common/utils.js';
+import { teamName } from '../common/utils.js';
 
 const route = useRoute();
 if (!route.params.id) {
@@ -81,4 +81,12 @@ player = player?.at(0);
 
 let stats = await playerStatsByID(route.params.id)
 stats = stats?.at(0);
+
+const teamNames = () => {
+  let names = [];
+  for (const team of player.team) {
+    names.push(teamName(team));
+  }
+  return names.join(', ');
+};
 </script>
