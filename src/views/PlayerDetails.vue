@@ -1,7 +1,7 @@
 <template>
   <PlayerHeader :player="player" />
 
-  <div v-if="battingStats" class="w-full text-lg font-bold mt-6">2023 Batting Stats</div>
+  <div v-if="battingStats" class="leading-6 w-full border-b-4 border-dodgerblue pb-1 text-left text-lg font-bold mt-6 mb-2">2023 Batting Stats</div>
   <PlayerBattingStats :stats="battingStats" />
 </template>
 

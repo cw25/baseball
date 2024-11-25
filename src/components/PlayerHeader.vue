@@ -1,9 +1,9 @@
 <template>
-  <div class="border border-2 px-2 rounded-md w-full text-left">
-    <div class="text-2xl font-bold">
+  <div class="w-full border-b-4 border-dodgerblue pb-1 text-left">
+    <div class="leading-6 text-2xl font-bold">
       {{ props.player.first }} {{ props.player.last }}
     </div>
-    <div class="w-full text-left text-xl font-bold">
+    <div class="w-full text-left text-large font-bold">
       {{ props.player.pos }} - {{ teamNames() }}
     </div>
   </div>
