@@ -7,7 +7,7 @@
   </div>
 
   <div>
-    <div class="mt-6 text-xs">
+    <div class="mt-6 text-[0.8rem]">
       <div v-for="player in state.results" :key="player.id">
         <PlayerListRow :player="player" />
       </div>

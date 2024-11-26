@@ -23,7 +23,7 @@ const router = createRouter({
       name: "player_details",
       component: () => import("../views/PlayerDetails.vue"),
     },
-  ],
+   ],
 });
 
 export default router;

@@ -4,6 +4,9 @@ export default {
   theme: {
     extend: {
       colors: { "dodgerblue": "#02319b" },
+      fontFamily: {
+        'mono': ['"Anonymous Pro"', 'monospace'],
+      },
     },
   },
   plugins: [],

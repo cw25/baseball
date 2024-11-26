@@ -9,7 +9,7 @@ export const fetchPlaysCount = async () => {
 
 export const searchPlayers = async (searchTerm) => {
   let res = await genericQuery(`
-    SELECT id, first, last, bat, throw, STRING_AGG(team, ', ' ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ', ' ORDER BY pos) AS pos
+    SELECT id, first, last, bat, throw, STRING_AGG(team, ',' ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ',' ORDER BY pos) AS pos
     FROM read_parquet('players_file')
     WHERE (last ILIKE '%${searchTerm}%' OR first ILIKE '%${searchTerm}%')
       AND team NOT IN ('ALS', 'NLS')
@@ -55,13 +55,50 @@ export const playerStatsByID = async (playerID) => {
       ROUND(SUM(b_h + b_d + (b_t * 2) + (b_hr * 3))::int / SUM(b_ab)::int, 3) AS SLG,
       ROUND(
         SUM(b_h + b_w + b_hbp)::int / SUM(b_ab + b_w + b_hbp + b_sf)::int
-        + SUM(b_h + b_d + (b_t * 2) + (b_hr * 3))::int / SUM(b_ab)::int, 3) AS OPS,
-      NULL AS WAR
+        + SUM(b_h + b_d + (b_t * 2) + (b_hr * 3))::int / SUM(b_ab)::int, 3) AS OPS
     FROM read_parquet('batting_file')
     WHERE id = '${playerID}'
     AND gid IN (
       SELECT gid FROM regular_season_games
     )
+  `);
+  return res;
+}
+
+export const batterOutcomes = async (playerID) => {
+  let res = await genericQuery(`
+    WITH regular_season_games AS (
+      SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
+    )
+
+    SELECT
+      SUM(pa) AS pas,
+      SUM(walk) AS walks,
+      ROUND(SUM(walk) / SUM(pa), 6) AS walk_pcg,
+      SUM(hbp) AS hbps,
+      ROUND(SUM(hbp) / SUM(pa), 6) AS hbp_pcg,
+      SUM((k AND NOT k_safe)::int) AS ks,
+      ROUND(SUM((k AND NOT k_safe)::int) / SUM(pa), 6) AS k_pcg,
+      SUM(single) AS singles,
+      ROUND(SUM(single) / SUM(pa), 6) AS single_pcg,
+      SUM(double) AS doubles,
+      ROUND(SUM(double) / SUM(pa), 6) AS double_pcg,
+      SUM(triple) AS triples,
+      ROUND(SUM(triple) / SUM(pa), 6) AS triple_pcg,
+      SUM(hr) AS hrs,
+      ROUND(SUM(hr) / SUM(pa), 6) AS hr_pcg,
+      SUM(othout) AS othouts,
+      ROUND(SUM(othout) / SUM(pa), 6) AS othout_pcg,
+      SUM(k_safe) AS k_safes,
+      ROUND(SUM(k_safe) / SUM(pa), 6) AS k_safe_pcg,
+    FROM read_parquet('plays_file')
+    WHERE
+      pa = 1
+      AND batter = '${playerID}'
+      AND gid IN (
+        SELECT gid FROM regular_season_games
+      )
+      AND NOT (sh OR xi OR e1 OR e2 OR e3 OR e4 OR e5 OR e6 OR e7 OR e8 OR e9)
   `);
   return res;
 }
