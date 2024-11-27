@@ -8,16 +8,8 @@
   </template>
 
   <template v-if="isPitcher()">
-    <div v-if="pitchingStats" class="leading-6 w-full border-b-4 border-dodgerblue pb-1 text-left text-lg font-bold mt-6 mb-2">
-      2023 Pitching Stats
-    </div>
-    <BasicPitchingTable :stats="pitchingStats" />
-
-    <div v-if="pitchingOutcomes" class="leading-6 w-full border-b-4 border-dodgerblue pb-1 text-left text-lg font-bold mt-6 mb-2">
-      Pitching Probabilities
-      <span class="text-xs">(approx.)</span>
-    </div>
-    <PitchingOutcomesTable :outcomes="pitchingOutcomes" />
+    <BasicPitchingTable v-if="pitchingStats" :stats="pitchingStats" />
+    <PitchingOutcomesTable v-if="pitchingOutcomes" :outcomes="pitchingOutcomes" />
   </template>
 </template>
 
