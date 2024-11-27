@@ -45,3 +45,7 @@ button {
   text-align: center;
 }
 
+#splash-content {
+  font-size: 2em;
+  font-weight: 600;
+}

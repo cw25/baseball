@@ -2,9 +2,6 @@
   <div>
     <Suspense>
       <PageContainer />
-      <template #fallback>
-        Loading...
-      </template>
     </Suspense>
   </div>
 </template>
