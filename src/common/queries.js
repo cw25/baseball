@@ -21,7 +21,11 @@ export const searchPlayers = async (searchTerm) => {
 
 export const playerByID = async (playerID) => {
   let res = await genericQuery(`
-    SELECT id, first, last, bat, throw, ARRAY_AGG(team ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ', ' ORDER BY pos) AS pos
+    SELECT id, first, last, bat, throw,
+      ARRAY_AGG(team ORDER BY team) AS team,
+      STRING_AGG(DISTINCT pos, ', ' ORDER BY pos) AS pos,
+      BIT_OR((pos = 'P')::BIT)::int AS is_pitcher,
+      BIT_OR((pos != 'P')::BIT)::int AS is_batter
     FROM read_parquet('players_file')
     WHERE id = '${playerID}'
       AND team NOT IN ('ALS', 'NLS')
@@ -30,7 +34,7 @@ export const playerByID = async (playerID) => {
   return res;
 };
 
-export const playerStatsByID = async (playerID) => {
+export const battingStatsByPlayerID = async (playerID) => {
   let res = await genericQuery(`
     WITH regular_season_games AS (
       SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
@@ -65,31 +69,21 @@ export const playerStatsByID = async (playerID) => {
   return res;
 }
 
-export const batterOutcomes = async (playerID) => {
+export const battingOutcomesByPlayerID = async (playerID) => {
   let res = await genericQuery(`
     WITH regular_season_games AS (
       SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
     )
 
     SELECT
-      SUM(pa) AS pas,
-      SUM(walk) AS walks,
       ROUND(SUM(walk) / SUM(pa), 6) AS walk_pcg,
-      SUM(hbp) AS hbps,
       ROUND(SUM(hbp) / SUM(pa), 6) AS hbp_pcg,
-      SUM((k AND NOT k_safe)::int) AS ks,
       ROUND(SUM((k AND NOT k_safe)::int) / SUM(pa), 6) AS k_pcg,
-      SUM(single) AS singles,
       ROUND(SUM(single) / SUM(pa), 6) AS single_pcg,
-      SUM(double) AS doubles,
       ROUND(SUM(double) / SUM(pa), 6) AS double_pcg,
-      SUM(triple) AS triples,
       ROUND(SUM(triple) / SUM(pa), 6) AS triple_pcg,
-      SUM(hr) AS hrs,
       ROUND(SUM(hr) / SUM(pa), 6) AS hr_pcg,
-      SUM(othout) AS othouts,
       ROUND(SUM(othout) / SUM(pa), 6) AS othout_pcg,
-      SUM(k_safe) AS k_safes,
       ROUND(SUM(k_safe) / SUM(pa), 6) AS k_safe_pcg,
     FROM read_parquet('plays_file')
     WHERE
@@ -100,6 +94,20 @@ export const batterOutcomes = async (playerID) => {
       )
       AND NOT (sh OR xi OR e1 OR e2 OR e3 OR e4 OR e5 OR e6 OR e7 OR e8 OR e9)
   `);
+  return res;
+}
+
+export const pitchingStatsByPlayerID = async (playerID) => {
+  // let res = await genericQuery(``);
+  playerID;
+  let res = null;
+  return res;
+}
+
+export const pitchingOutcomesByPlayerID = async (playerID) => {
+  playerID;
+  // let res = await genericQuery(``);
+  let res = null;
   return res;
 }
 
