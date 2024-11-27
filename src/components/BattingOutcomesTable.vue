@@ -19,13 +19,14 @@
     <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.triple_pcg).toFixed(2) }}%</div>
 
     <div class="w-full text-left col-span-1">OUT</div>
-    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.othout_pcg).toFixed(2) }}%</div>
+    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.out_pcg).toFixed(2) }}%</div>
     <div class="col-span-2"></div>
     <div class="w-full text-left col-span-1">HR</div>
     <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.hr_pcg).toFixed(2) }}%</div>
   </div>
 
   <button @click="simulateOutcome()">SIMULATE</button>
+  <br />
   {{ state.simulatedOutcome }}
 </template>
 
@@ -38,18 +39,18 @@ const props = defineProps({
 });
 
 const state = reactive({
-  simulatedOutcome: { type: String, default: "" },
+  simulatedOutcome: "",
 });
 
 const simulateOutcome = () => {
   let ceiling = 0;
-  ['walk', 'hbp', 'k', 'othout', 'single', 'double', 'triple', 'hr'].forEach((x) => {
+  ['walk', 'hbp', 'k', 'out', 'single', 'double', 'triple', 'hr'].forEach((x) => {
     ceiling += props.outcomes[`${x}_pcg`] * Math.pow(10,6);
   });
 
   let threshold = 0;
   let rando = getRandomInt(ceiling);
-  ['walk', 'hbp', 'k', 'othout', 'single', 'double', 'triple', 'hr'].forEach((x) => {
+  ['walk', 'hbp', 'k', 'out', 'single', 'double', 'triple', 'hr'].forEach((x) => {
     let upper = props.outcomes[`${x}_pcg`] * Math.pow(10,6);
     if (rando > threshold && rando < upper + threshold + 1) {
       state.simulatedOutcome = x;

@@ -83,7 +83,7 @@ export const battingOutcomesByPlayerID = async (playerID) => {
       ROUND(SUM(double) / SUM(pa), 6) AS double_pcg,
       ROUND(SUM(triple) / SUM(pa), 6) AS triple_pcg,
       ROUND(SUM(hr) / SUM(pa), 6) AS hr_pcg,
-      ROUND(SUM(othout) / SUM(pa), 6) AS othout_pcg,
+      ROUND(SUM(othout) / SUM(pa), 6) AS out_pcg,
       ROUND(SUM(k_safe) / SUM(pa), 6) AS k_safe_pcg,
     FROM read_parquet('plays_file')
     WHERE
