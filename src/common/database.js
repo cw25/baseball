@@ -36,8 +36,8 @@ const initDBSchema = async(db) => {
     const battingRes = await fetch('/db/batting.parquet');
     await db.registerFileBuffer('batting_file', new Uint8Array(await battingRes.arrayBuffer()));
 
-    // const fieldingRes = await fetch('/db/fielding.parquet');
-    // await db.registerFileBuffer('fielding_file', new Uint8Array(await fieldingRes.arrayBuffer()));
+    const fieldingRes = await fetch('/db/fielding.parquet');
+    await db.registerFileBuffer('fielding_file', new Uint8Array(await fieldingRes.arrayBuffer()));
 
     const gameinfoRes = await fetch('/db/gameinfo.parquet');
     await db.registerFileBuffer('gameinfo_file', new Uint8Array(await gameinfoRes.arrayBuffer()));
@@ -51,6 +51,8 @@ const initDBSchema = async(db) => {
     const playsRes = await fetch('/db/plays.parquet');
     await db.registerFileBuffer('plays_file', new Uint8Array(await playsRes.arrayBuffer()));
 
+    const teamStatsRes = await fetch('/db/teamstats.parquet');
+    await db.registerFileBuffer('teamstats_file', new Uint8Array(await teamStatsRes.arrayBuffer()));
   } catch(e) {
     console.log("Error while building local database:", e);
   }
