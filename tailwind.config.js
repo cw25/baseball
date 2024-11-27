@@ -7,6 +7,9 @@ export default {
       fontFamily: {
         'mono': ['"Anonymous Pro"', 'monospace'],
       },
+      strokeWidth: {
+        'homeicon': '0.5px',
+      }
     },
   },
   plugins: [],
