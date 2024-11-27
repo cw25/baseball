@@ -28,6 +28,12 @@
     <div class="col-span-2"></div>
     <div class="w-full text-left col-span-1">HR</div>
     <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.hr_pcg).toFixed(2) }}%</div>
+
+    <div class="w-full text-left col-span-1">TOT</div>
+    <div class="w-full text-right col-span-2">{{ 100 * total.toFixed(2) }}%</div>
+    <div class="col-span-2"></div>
+    <div class="w-full text-left col-span-1"></div>
+    <div class="w-full text-right col-span-2"></div>
   </div>
 </template>
 
@@ -35,4 +41,7 @@
 const props = defineProps({
   outcomes: { type: Object },
 });
+
+const total = props.outcomes.walk_pcg + props.outcomes.single_pcg + props.outcomes.hbp_pcg + props.outcomes.double_pcg +
+  props.outcomes.k_pcg + props.outcomes.triple_pcg + props.outcomes.out_pcg + props.outcomes.hr_pcg;
 </script>

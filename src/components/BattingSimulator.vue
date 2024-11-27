@@ -2,7 +2,7 @@
   <div class="leading-6 w-full border-b-4 border-dodgerblue pb-1 text-left text-lg font-bold mt-6 mb-2">
     Simulate Batting
     <button
-      @click="simulateLotsOfOutcomes(ITERATIONS)"
+      @click="runSimulator()"
       class="text-xs bg-dodgerblue text-white ml-2 p-0.5 px-3"
     >
       Simulate {{ ITERATIONS }} ABs
@@ -38,49 +38,19 @@
 
 <script setup>
 import { reactive } from 'vue';
-import { getRandomInt } from '../common/utils.js';
+import { ITERATIONS, simulateLotsOfOutcomes } from '../common/simulator.js';
 
 const props = defineProps({
   outcomes: { type: Object },
 });
 
 const state = reactive({
-  simulatedOutcomes: "",
+  simulatedOutcomes: {},
 });
 
-const ITERATIONS = 10000;
+const runSimulator = () => {
+  state.simulatedOutcomes = simulateLotsOfOutcomes(props.outcomes);
+}
 
-const simulateLotsOfOutcomes = () => {
-  state.simulatedOutcomes = {};
-  for (let i=0; i<ITERATIONS; i++) {
-    let o = simulateOutcome();
-    if (!state.simulatedOutcomes[o]) {
-      state.simulatedOutcomes[o] = 1;
-    } else {
-      state.simulatedOutcomes[o]++;
-    }
-  }
-};
-
-const simulateOutcome = () => {
-  let ceiling = 0;
-  ['walk', 'hbp', 'k', 'out', 'single', 'double', 'triple', 'hr'].forEach((x) => {
-    ceiling += props.outcomes[`${x}_pcg`] * Math.pow(10,6);
-  });
-
-  let o;
-  let threshold = 0;
-  let rando = getRandomInt(ceiling);
-  ['walk', 'hbp', 'k', 'out', 'single', 'double', 'triple', 'hr'].forEach((x) => {
-    let upper = props.outcomes[`${x}_pcg`] * Math.pow(10,6);
-    if (rando >= threshold && rando < upper + threshold + 1) {
-      o = x;
-    }
-    threshold += upper;
-  });
-
-  return o || 'err';
-};
-
-simulateLotsOfOutcomes();
+runSimulator();
 </script>
