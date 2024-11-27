@@ -1,6 +1,6 @@
 <template>
   <div class="text-3xl font-bold">
-    Databaseball
+    databaseball
   </div>
   <div class="w-full h-full -rotate-12">
     <DatabaseballLogo class="text-dodgerblue scale-50" />
