@@ -76,5 +76,10 @@ export default defineConfig(({ command }) => {
       }
     })(),
     clearScreen: false,
+    esbuild: {
+      supported: {
+        'top-level-await': true //browsers can handle top-level-await features
+      },
+    },
   }
 })

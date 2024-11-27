@@ -46,7 +46,9 @@
     <div class="col-span-2"></div>
     <div class="w-full text-left col-span-1"></div>
     <div class="w-full text-right col-span-2"></div>
-  </div>
+</div>
+
+{{ props.outcomes.all_outcomes }} / {{ props.outcomes.denom }}
 </template>
 
 <script setup>
