@@ -53,7 +53,6 @@ const isPitcher = () => {
 
 let player = await playerByID(route.params.id);
 player = player?.at(0);
-console.log(player);
 
 let battingStats;
 let battingOutcomes;

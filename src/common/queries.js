@@ -98,9 +98,31 @@ export const battingOutcomesByPlayerID = async (playerID) => {
 }
 
 export const pitchingStatsByPlayerID = async (playerID) => {
-  // let res = await genericQuery(``);
-  playerID;
-  let res = null;
+  let res = await genericQuery(`
+    WITH regular_season_games AS (
+      SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
+    )
+
+    SELECT
+      COUNT(DISTINCT gid)::int AS GP,
+      SUM(p_gs)::int AS GS,
+      SUM(p_cg)::int AS CG,
+      SUM((p_er = 0)::int)::int AS SHO,
+      SUM(p_ipouts)::int AS IP,
+      SUM(p_h)::int AS H,
+      SUM(p_r)::int AS R,
+      SUM(p_er)::int AS ER,
+      SUM(p_hr)::int AS HR,
+      SUM(p_w)::int AS BB,
+      SUM(p_hbp)::int AS HBP,
+      SUM(p_k)::int AS K
+    FROM read_parquet('pitching_file')
+    WHERE
+      id = '${playerID}'
+      AND gid IN (
+        SELECT gid FROM regular_season_games
+      )
+  `);
   return res;
 }
 
