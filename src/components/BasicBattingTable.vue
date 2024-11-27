@@ -1,5 +1,9 @@
 <template>
-    <div class="px-3 rounded-md w-full grid grid-cols-8 font-mono font-bold text-sm">
+  <div class="leading-6 w-full border-b-4 border-dodgerblue pb-1 text-left text-lg font-bold mt-6 mb-2">
+    2023 Batting Stats
+  </div>
+
+  <div class="px-3 rounded-md w-full grid grid-cols-8 font-mono font-bold text-sm">
     <div class="w-full text-left col-span-1">GP</div>
     <div class="w-full text-right col-span-2">{{ props.stats.GP }}</div>
     <div class="col-span-2"></div>

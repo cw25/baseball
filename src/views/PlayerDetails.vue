@@ -2,16 +2,9 @@
   <PlayerHeader :player="player" />
 
   <template v-if="isBatter()">
-    <div v-if="battingStats" class="leading-6 w-full border-b-4 border-dodgerblue pb-1 text-left text-lg font-bold mt-6 mb-2">
-      2023 Batting Stats
-    </div>
-    <BasicBattingTable :stats="battingStats" />
-
-    <div v-if="battingOutcomes" class="leading-6 w-full border-b-4 border-dodgerblue pb-1 text-left text-lg font-bold mt-6 mb-2">
-      Batting Probabilities
-      <span class="text-xs">(approx.)</span>
-    </div>
-    <BattingOutcomesTable :outcomes="battingOutcomes" />
+    <BasicBattingTable v-if="battingStats" :stats="battingStats" />
+    <BattingOutcomesTable v-if="battingOutcomes" :outcomes="battingOutcomes" />
+    <BattingSimulator v-if="battingOutcomes" :outcomes="battingOutcomes" />
   </template>
 
   <template v-if="isPitcher()">
@@ -35,6 +28,7 @@ import { playerByID, battingStatsByPlayerID, battingOutcomesByPlayerID, pitching
 import PlayerHeader from '../components/PlayerHeader.vue';
 import BattingOutcomesTable from '../components/BattingOutcomesTable.vue';
 import BasicBattingTable from '../components/BasicBattingTable.vue';
+import BattingSimulator from '../components/BattingSimulator.vue';
 import PitchingOutcomesTable from '../components/PitchingOutcomesTable.vue';
 import BasicPitchingTable from '../components/BasicPitchingTable.vue';
 
