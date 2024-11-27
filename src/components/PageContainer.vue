@@ -13,4 +13,6 @@
 
 <script setup>
 import BottomNavBar from '@/components/BottomNavBar.vue';
+import { waitOnDB } from '@/common/queries.js';
+await waitOnDB();
 </script>

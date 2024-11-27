@@ -9,11 +9,6 @@ const router = createRouter({
       component: () => import("../views/BaseballHome.vue"),
     },
     {
-      path: "/plays_count",
-      name: "plays_count",
-      component: () => import("../views/PlaysCount.vue"),
-    },
-    {
       path: "/player_search",
       name: "player_search",
       component: () => import("../views/PlayerSearch.vue"),

@@ -1,12 +1,5 @@
 import { conn } from "./database.js";
 
-export const fetchPlaysCount = async () => {
-  let res = await genericQuery(
-    "SELECT COUNT(*)::INTEGER AS plays_count FROM read_parquet('plays_file')"
-  );
-  return res[0].plays_count;
-};
-
 export const searchPlayers = async (searchTerm) => {
   let res = await genericQuery(`
     SELECT id, first, last, bat, throw, STRING_AGG(team, ',' ORDER BY team) AS team, STRING_AGG(DISTINCT pos, ',' ORDER BY pos) AS pos
@@ -154,6 +147,11 @@ export const pitchingOutcomesByPlayerID = async (playerID) => {
   `);
   return res;
 }
+
+export const waitOnDB = async () => {
+  let res = await genericQuery(`SELECT gid FROM read_parquet('plays_file') LIMIT 1`);
+  return res;
+};
 
 const genericQuery = async (sql) => {
   let q = await conn.query(sql);
