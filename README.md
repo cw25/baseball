@@ -16,3 +16,15 @@ Run local web version:
 * `cd dist`
 * `npx http-server`
 * Access on http://localhost:8080
+
+
+## TODO:
+
+* game state struct
+* lineup struct
+* sim half inning
+* game state view - positional w names
+* fielding outcomes, probs, and sim
+* L/R batter splits
+* L/R pitcher splits
+* pitcher quality decay per pitches thrown
