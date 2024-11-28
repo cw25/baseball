@@ -40,23 +40,18 @@ const isPitcher = () => {
 }
 
 let player = await playerByID(route.params.id);
-player = player?.at(0);
 
 let battingStats;
 let battingOutcomes;
 if (isBatter()) {
   battingStats = await battingStatsByPlayerID(route.params.id)
-  battingStats = battingStats?.at(0);
   battingOutcomes = await battingOutcomesByPlayerID(route.params.id);
-  battingOutcomes = battingOutcomes?.at(0);
 }
 
 let pitchingStats;
 let pitchingOutcomes;
 if (isPitcher()) {
   pitchingStats = await pitchingStatsByPlayerID(route.params.id)
-  pitchingStats = pitchingStats?.at(0);
   pitchingOutcomes = await pitchingOutcomesByPlayerID(route.params.id);
-  pitchingOutcomes = pitchingOutcomes?.at(0);
 }
 </script>

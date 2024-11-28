@@ -18,6 +18,11 @@ const router = createRouter({
       name: "player_details",
       component: () => import("../views/PlayerDetails.vue"),
     },
+    {
+      path: "/matchup_simulator/pitcher/:pitcher_id/batter/:batter_id",
+      name: "matchup_simulator",
+      component: () => import("../views/MatchupSimulator.vue"),
+    },
    ],
 });
 

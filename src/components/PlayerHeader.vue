@@ -13,7 +13,7 @@
 import { teamName } from '../common/utils.js';
 
 const props = defineProps({
-  player: { player: Object },
+  player: { type: Object },
 });
 
 const teamNames = () => {

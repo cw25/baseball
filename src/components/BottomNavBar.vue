@@ -13,6 +13,13 @@
         <MagnifyingGlassCircleIconOutline v-else class="w-6" />
       </button>
     </router-link>
+
+    <router-link :to="{ name: 'matchup_simulator', params: { pitcher_id: 'snelb001', batter_id: 'hernt002' }}">
+      <button type="button" class="active:outline-none focus:outline-none hover:outline-none border-none color-transparent bg-transparent inline-flex flex-col items-center justify-center mx-1 group stroke-stone-600 text-stone-600">
+        <UserGroupIcon v-if="route.name === 'matchup_simulator'" class="w-6" />
+        <UserGroupIconOutline v-else class="w-6" />
+      </button>
+    </router-link>
   </div>
 </template>
 
@@ -22,6 +29,8 @@ import { HomeIcon } from "@heroicons/vue/24/solid";
 import { HomeIcon as HomeIconOutline } from "@heroicons/vue/24/outline";
 import { MagnifyingGlassCircleIcon } from "@heroicons/vue/24/solid";
 import { MagnifyingGlassCircleIcon as MagnifyingGlassCircleIconOutline } from "@heroicons/vue/24/outline";
+import { UserGroupIcon } from "@heroicons/vue/24/solid";
+import { UserGroupIcon as UserGroupIconOutline } from "@heroicons/vue/24/outline";
 
 const route = useRoute();
 </script>

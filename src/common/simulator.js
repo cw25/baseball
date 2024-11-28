@@ -65,3 +65,32 @@ export function simulateOutcome(history, style) {
 
   return o || 'err';
 };
+
+export function simulateMatchup(pitcher, batter) {
+  let rando = getRandomInt(100);
+  if (rando < 50) {
+    return simulateOutcome(pitcher, 'pitching');
+  } else {
+    return simulateOutcome(batter, 'batting');
+  }
+};
+
+export function simulateMatchupOutcomes(pitcher, batter, iterations) {
+  // Initialize all outcomes
+  let simulatedOutcomes = {};
+  PITCHING_OUTCOMES.forEach((x) => simulatedOutcomes[x] = 0);
+
+  for (let i=0; i<iterations; i++) {
+    let o;
+    let rando = getRandomInt(100);
+    if (rando < 50) {
+      o = simulateOutcome(pitcher, 'pitching');
+    } else {
+      o = simulateOutcome(batter, 'batting');
+    }
+
+    simulatedOutcomes[o]++;
+  }
+
+  return simulatedOutcomes;
+};

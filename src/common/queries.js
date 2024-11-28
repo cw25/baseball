@@ -24,7 +24,7 @@ export const playerByID = async (playerID) => {
       AND team NOT IN ('ALS', 'NLS')
     GROUP BY id, first, last, bat, throw
   `);
-  return res;
+  return res?.at(0);
 };
 
 export const battingStatsByPlayerID = async (playerID) => {
@@ -56,8 +56,9 @@ export const battingStatsByPlayerID = async (playerID) => {
     FROM read_parquet('batting_file')
     WHERE id = '${playerID}'
     AND gid IN ( SELECT gid FROM regular_season_games )
+    LIMIT 1
   `);
-  return res;
+  return res?.at(0);
 }
 
 export const battingOutcomesByPlayerID = async (playerID) => {
@@ -85,7 +86,7 @@ export const battingOutcomesByPlayerID = async (playerID) => {
       AND gid IN ( SELECT gid FROM regular_season_games )
       AND NOT (di OR oa OR sh OR xi OR e1 OR e2 OR e3 OR e4 OR e5 OR e6 OR e7 OR e8 OR e9)
   `);
-  return res;
+  return res?.at(0);
 }
 
 export const pitchingStatsByPlayerID = async (playerID) => {
@@ -111,8 +112,9 @@ export const pitchingStatsByPlayerID = async (playerID) => {
     WHERE
       id = '${playerID}'
       AND gid IN ( SELECT gid FROM regular_season_games )
+    LIMIT 1
   `);
-  return res;
+  return res?.at(0);
 }
 
 export const pitchingOutcomesByPlayerID = async (playerID) => {
@@ -146,7 +148,7 @@ export const pitchingOutcomesByPlayerID = async (playerID) => {
       AND gid IN ( SELECT gid FROM regular_season_games )
       AND NOT (pb OR di OR oa OR xi OR e1 OR e2 OR e3 OR e4 OR e5 OR e6 OR e7 OR e8 OR e9)
   `);
-  return res;
+  return res?.at(0);
 }
 
 export const waitOnDB = async () => {

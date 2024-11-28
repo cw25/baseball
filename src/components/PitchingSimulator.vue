@@ -5,7 +5,7 @@
       @click="runSimulator()"
       class="text-xs bg-dodgerblue text-white ml-2 p-0.5 px-3"
     >
-      Simulate {{ iterations }} ABs
+      Simulate {{ iterations }} PAs
     </button>
   </div>
 
