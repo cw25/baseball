@@ -5,11 +5,11 @@
   </div>
 
   <div class="px-3 rounded-md w-full grid grid-cols-8 font-mono font-bold text-sm">
-    <div class="w-full text-left col-span-1">GB%</div>
-    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.gb_pcg).toFixed(2) }}%</div>
+    <div class="w-full text-left col-span-1">GO%</div>
+    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.go_pcg).toFixed(2) }}%</div>
     <div class="col-span-2"></div>
-    <div class="w-full text-left col-span-1">FB%</div>
-    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.fb_pcg).toFixed(2) }}%</div>
+    <div class="w-full text-left col-span-1">FO%</div>
+    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.fo_pcg).toFixed(2) }}%</div>
 
     <div class="w-full text-left col-span-1">HBP%</div>
     <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.hbp_pcg).toFixed(2) }}%</div>
@@ -38,20 +38,8 @@
     <div class="w-full text-left col-span-1">WP%</div>
     <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.wp_pcg).toFixed(2) }}%</div>
     <div class="col-span-2"></div>
-    <div class="w-full text-left col-span-1">PB%</div>
-    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.pb_pcg).toFixed(2) }}%</div>
-
     <div class="w-full text-left col-span-1">BALK%</div>
     <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.bk_pcg).toFixed(2) }}%</div>
-    <div class="col-span-2"></div>
-    <div class="w-full text-left col-span-1"></div>
-    <div class="w-full text-right col-span-2"></div>
-
-    <div class="w-full text-left col-span-1">TOT</div>
-    <div class="w-full text-right col-span-2">{{ 100 * total.toFixed(2) }}%</div>
-    <div class="col-span-2"></div>
-    <div class="w-full text-left col-span-1"></div>
-    <div class="w-full text-right col-span-2"></div>
   </div>
 </template>
 
@@ -59,10 +47,4 @@
 const props = defineProps({
   outcomes: { type: Object },
 });
-
-
-const total = props.outcomes.gb_pcg + props.outcomes.fb_pcg + props.outcomes.hbp_pcg + props.outcomes.k_pcg +
-  props.outcomes.lo_pcg + props.outcomes.walk_pcg + props.outcomes.hr_pcg + props.outcomes.single_pcg +
-  props.outcomes.double_pcg + props.outcomes.triple_pcg + props.outcomes.wp_pcg + props.outcomes.pb_pcg +
-  props.outcomes.bk_pcg;
 </script>

@@ -10,11 +10,11 @@
   </div>
 
   <div class="px-3 rounded-md w-full grid grid-cols-8 font-mono font-bold text-sm">
-    <div class="w-full text-left col-span-1">GB</div>
-    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['gb'] / iterations).toFixed(2) }}%</div>
+    <div class="w-full text-left col-span-1">GO</div>
+    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['go'] / iterations).toFixed(2) }}%</div>
     <div class="col-span-2"></div>
-    <div class="w-full text-left col-span-1">FB</div>
-    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['fb'] / iterations).toFixed(2) }}%</div>
+    <div class="w-full text-left col-span-1">FO</div>
+    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['fo'] / iterations).toFixed(2) }}%</div>
 
     <div class="w-full text-left col-span-1">HBP</div>
     <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['hbp'] / iterations).toFixed(2) }}%</div>
@@ -43,14 +43,8 @@
     <div class="w-full text-left col-span-1">WP</div>
     <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['wp'] / iterations).toFixed(2) }}%</div>
     <div class="col-span-2"></div>
-    <div class="w-full text-left col-span-1">PB</div>
-    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['pb'] / iterations).toFixed(2) }}%</div>
-
     <div class="w-full text-left col-span-1">BALK</div>
     <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['bk'] / iterations).toFixed(2) }}%</div>
-    <div class="col-span-2"></div>
-    <div class="w-full text-left col-span-1"></div>
-    <div class="w-full text-right col-span-2"></div>
   </div>
 </template>
 

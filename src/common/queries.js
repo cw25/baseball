@@ -120,8 +120,8 @@ export const pitchingOutcomesByPlayerID = async (playerID) => {
     )
 
     SELECT
-      SUM((ground AND othout)::int)::int / COUNT(*) AS gb_pcg,
-      SUM((fly AND othout)::int)::int / COUNT(*) AS fb_pcg,
+      SUM((ground AND othout)::int)::int / COUNT(*) AS go_pcg,
+      SUM((fly AND othout)::int)::int / COUNT(*) AS fo_pcg,
       SUM(k)::int / COUNT(*) AS k_pcg,
       SUM((line AND othout)::int)::int / COUNT(*) AS lo_pcg,
       SUM(walk)::int / COUNT(*) AS walk_pcg,
@@ -131,19 +131,18 @@ export const pitchingOutcomesByPlayerID = async (playerID) => {
       SUM(double)::int / COUNT(*) AS double_pcg,
       SUM(triple)::int / COUNT(*) AS triple_pcg,
       SUM(wp)::int / COUNT(*) AS wp_pcg,
-      SUM(pb)::int / COUNT(*) AS pb_pcg,
       SUM(bk)::int / COUNT(*) AS bk_pcg,
 
       SUM((ground AND othout)::int)::int + SUM((fly AND othout)::int)::int + SUM(k)::int + SUM((line AND othout)::int)::int
         + SUM(walk)::int + SUM(hbp)::int + SUM(hr)::int + SUM(single)::int + SUM(double)::int + SUM(triple)::int
-        + SUM(wp)::int + SUM(pb)::int + SUM(bk)::int AS all_outcomes,
+        + SUM(wp)::int + SUM(bk)::int AS all_outcomes,
       COUNT(*) AS denom
     FROM read_parquet('plays_file')
     WHERE
       pitcher = '${playerID}'
       AND pa = 1
       AND gid IN ( SELECT gid FROM regular_season_games )
-      AND NOT (di OR oa OR xi OR e1 OR e2 OR e3 OR e4 OR e5 OR e6 OR e7 OR e8 OR e9)
+      AND NOT (pb OR di OR oa OR xi OR e1 OR e2 OR e3 OR e4 OR e5 OR e6 OR e7 OR e8 OR e9)
   `);
   return res;
 }
