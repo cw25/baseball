@@ -10,6 +10,7 @@
   <template v-if="isPitcher()">
     <BasicPitchingTable v-if="pitchingStats" :stats="pitchingStats" />
     <PitchingOutcomesTable v-if="pitchingOutcomes" :outcomes="pitchingOutcomes" />
+    <PitchingSimulator v-if="pitchingOutcomes" :outcomes="pitchingOutcomes" />
   </template>
 </template>
 
@@ -23,6 +24,7 @@ import BasicBattingTable from '../components/BasicBattingTable.vue';
 import BattingSimulator from '../components/BattingSimulator.vue';
 import PitchingOutcomesTable from '../components/PitchingOutcomesTable.vue';
 import BasicPitchingTable from '../components/BasicPitchingTable.vue';
+import PitchingSimulator from '../components/PitchingSimulator.vue';
 
 const route = useRoute();
 if (!route.params.id) {
