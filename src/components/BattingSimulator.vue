@@ -28,8 +28,14 @@
     <div class="w-full text-left col-span-1">3B</div>
     <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['triple'] / iterations).toFixed(2) }}%</div>
 
-    <div class="w-full text-left col-span-1">OUT</div>
-    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['out'] / iterations).toFixed(2) }}%</div>
+    <div class="w-full text-left col-span-1">GO</div>
+    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['go'] / iterations).toFixed(2) }}%</div>
+    <div class="col-span-2"></div>
+    <div class="w-full text-left col-span-1">FO</div>
+    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['fo'] / iterations).toFixed(2) }}%</div>
+
+    <div class="w-full text-left col-span-1">LO</div>
+    <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['lo'] / iterations).toFixed(2) }}%</div>
     <div class="col-span-2"></div>
     <div class="w-full text-left col-span-1">HR</div>
     <div class="w-full text-right col-span-2">{{ (100 * state.simulatedOutcomes['hr'] / iterations).toFixed(2) }}%</div>

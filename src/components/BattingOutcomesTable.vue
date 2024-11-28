@@ -23,8 +23,14 @@
     <div class="w-full text-left col-span-1">3B</div>
     <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.triple_pcg).toFixed(2) }}%</div>
 
-    <div class="w-full text-left col-span-1">OUT</div>
-    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.out_pcg).toFixed(2) }}%</div>
+    <div class="w-full text-left col-span-1">GO</div>
+    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.go_pcg).toFixed(2) }}%</div>
+    <div class="col-span-2"></div>
+    <div class="w-full text-left col-span-1">FO</div>
+    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.fo_pcg).toFixed(2) }}%</div>
+
+    <div class="w-full text-left col-span-1">LO</div>
+    <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.lo_pcg).toFixed(2) }}%</div>
     <div class="col-span-2"></div>
     <div class="w-full text-left col-span-1">HR</div>
     <div class="w-full text-right col-span-2">{{ (100 * props.outcomes.hr_pcg).toFixed(2) }}%</div>

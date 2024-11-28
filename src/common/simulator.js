@@ -2,7 +2,7 @@
 import { getRandomInt } from '../common/utils.js';
 
 export const A_WHOLE_LOT = 50000;
-const BATTING_OUTCOMES = ['walk', 'hbp', 'k', 'out', 'single', 'double', 'triple', 'hr'];
+const BATTING_OUTCOMES = ['walk', 'hbp', 'k', 'go', 'fo', 'lo', 'single', 'double', 'triple', 'hr'];
 const PITCHING_OUTCOMES = ['go', 'fo', 'hbp', 'k', 'lo', 'walk', 'hr', 'single', 'double', 'triple', 'wp', 'bk'];
 const FIELDING_OUTCOMES = ['out'];
 
