@@ -17,7 +17,7 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
-import { playerByID, battingStatsByPlayerID, battingOutcomesByPlayerID, pitchingStatsByPlayerID, pitchingOutcomesByPlayerID } from '../common/queries.js';
+import { playerByID, battingStatsByPlayerID, battingOutcomesByPlayerID, pitchingStatsByPlayerID, pitchingOutcomesByPlayerIDs } from '../common/queries.js';
 import PlayerHeader from '../components/PlayerHeader.vue';
 import BattingOutcomesTable from '../components/BattingOutcomesTable.vue';
 import BasicBattingTable from '../components/BasicBattingTable.vue';
@@ -44,14 +44,15 @@ let player = await playerByID(route.params.id);
 let battingStats;
 let battingOutcomes;
 if (isBatter()) {
-  battingStats = await battingStatsByPlayerID(route.params.id)
+  battingStats = await battingStatsByPlayerID(route.params.id);
   battingOutcomes = await battingOutcomesByPlayerID(route.params.id);
 }
 
 let pitchingStats;
 let pitchingOutcomes;
 if (isPitcher()) {
-  pitchingStats = await pitchingStatsByPlayerID(route.params.id)
-  pitchingOutcomes = await pitchingOutcomesByPlayerID(route.params.id);
+  pitchingStats = await pitchingStatsByPlayerID(route.params.id);
+  pitchingOutcomes = await pitchingOutcomesByPlayerIDs([route.params.id]);
+  pitchingOutcomes = pitchingOutcomes[route.params.id];
 }
 </script>

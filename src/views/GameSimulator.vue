@@ -4,6 +4,7 @@
       {{ outcome[0] }}
     </span>
   </div>
+
   <div class="text-2xl font-bold">
     Final Score
     <br />
@@ -11,6 +12,7 @@
     -
     {{ game.homeTeam }} {{ game.status.homeScore }}
   </div>
+
   <ScrollSpacer />
 </template>
 

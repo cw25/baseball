@@ -1,4 +1,4 @@
-import { pitchingOutcomesByPlayerID, battingOutcomesByPlayerID } from "./queries";
+import { pitchingOutcomesByPlayerIDs, battingOutcomesByPlayerID } from "./queries";
 import { OUT_TYPES, simulateMatchup } from "./simulator";
 
 export function newGame() {
@@ -62,7 +62,8 @@ export function newGame() {
             bID = this.visitorLineup.battingOrder[this.status.visitorBattingOrderIndex];
           }
 
-          pitcher = await pitchingOutcomesByPlayerID(pID);
+          pitcher = await pitchingOutcomesByPlayerIDs([pID]);
+          pitcher = pitcher[pID];
           batter = await battingOutcomesByPlayerID(bID);
           outcome = await this.simulateAtBat(pitcher, batter);
 

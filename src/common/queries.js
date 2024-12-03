@@ -119,13 +119,14 @@ export const pitchingStatsByPlayerID = async (playerID) => {
   return res?.at(0);
 }
 
-export const pitchingOutcomesByPlayerID = async (playerID) => {
-  let res = await genericQuery(`
+export const pitchingOutcomesByPlayerIDs = async (playerIDs) => {
+  let res = await queryToHash(`
     WITH regular_season_games AS (
       SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
     )
 
     SELECT
+      pitcher,
       SUM((ground AND othout)::int)::int / COUNT(*) AS go_pcg,
       SUM((fly AND othout)::int)::int / COUNT(*) AS fo_pcg,
       SUM(k)::int / COUNT(*) AS k_pcg,
@@ -145,13 +146,13 @@ export const pitchingOutcomesByPlayerID = async (playerID) => {
       COUNT(*) AS denom
     FROM read_parquet('plays_file')
     WHERE
-      pitcher = '${playerID}'
+      pitcher IN ('${ playerIDs.join("', '") }')
       AND pa = 1
       AND gid IN ( SELECT gid FROM regular_season_games )
       AND NOT (pb OR di OR oa OR xi OR e1 OR e2 OR e3 OR e4 OR e5 OR e6 OR e7 OR e8 OR e9)
-    LIMIT 1
-  `);
-  return res?.at(0);
+    GROUP BY pitcher
+  `, 'pitcher');
+  return res;
 }
 
 export const waitOnDB = async () => {
@@ -160,8 +161,14 @@ export const waitOnDB = async () => {
 };
 
 const genericQuery = async (sql) => {
-  // console.log('queried');
   let q = await conn.query(sql);
   let results = await q.toArray().map((row) => row.toJSON());
+  return results;
+};
+
+const queryToHash = async (sql, hashCol) => {
+  let q = await conn.query(sql);
+  let results = {};
+  await q.toArray().forEach((row) => results[row[hashCol]] = row.toJSON() );
   return results;
 };
