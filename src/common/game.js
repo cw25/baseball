@@ -1,5 +1,5 @@
 import { pitchingOutcomesByPlayerID, battingOutcomesByPlayerID } from "./queries";
-import { simulateMatchup } from "./simulator";
+import { OUT_TYPES, simulateMatchup } from "./simulator";
 
 export function newGame() {
   return {
@@ -32,9 +32,9 @@ export function newGame() {
       battingOrder: [ 'delae003', 'friet001', 'mclam001', 'fralj001', 'stees001', 'vottj001', 'encac001', 'senzn001', 'maill001' ],
     },
     status: {
-      "1Brunner": {},
-      "2Brunner": {},
-      "3Brunner": {},
+      runner1: null,
+      runner2: null,
+      runner3: null,
       inning: 1,
       bottomInning: false,
       outs: 0,
@@ -46,24 +46,21 @@ export function newGame() {
       homeBattingOrderIndex: 0,
     },
     simulateAtBat: async function(pitcher, batter) {
-      console.log("simulating", pitcher, batter);
       return simulateMatchup(pitcher, batter);
     },
     simulateHalfInning: async function() {
       let pID, bID, pitcher, batter, outcome;
       let resultsLog = [];
 
-      while (this.status.inning < 2) {
+      while (this.status.inning <= 9) {
         while (this.status.outs < 3) {
           if (this.status.bottomInning) {
             pID = this.visitorLineup.P.id;
             bID = this.homeLineup.battingOrder[this.status.homeBattingOrderIndex];
           } else {
-            console.log("visitors batter", this.status.visitorBattingOrderIndex);
             pID = this.homeLineup.P.id;
             bID = this.visitorLineup.battingOrder[this.status.visitorBattingOrderIndex];
           }
-          console.log("pitcher", pID, "batter", bID);
 
           pitcher = await pitchingOutcomesByPlayerID(pID);
           batter = await battingOutcomesByPlayerID(bID);
@@ -73,12 +70,10 @@ export function newGame() {
           let resultID = result.join('-');
           resultsLog.push([resultID, ...result]);
 
-          if (['fo', 'go', 'lo', 'k'].includes(outcome)) {
+          if (OUT_TYPES.includes(outcome)) {
             this.status.outs += 1;
-          } else if (outcome === "bk") {
-            // this.advanceAllBaseRunners()
-            // ['hbp', 'walk', 'hr', 'single', 'double', 'triple',
-            // Advance on-base runners only +1 each
+          } else {
+            this.advanceRunners(bID, outcome);
           }
 
           if (this.status.bottomInning) {
@@ -93,8 +88,73 @@ export function newGame() {
         }
         this.status.bottomInning = !this.status.bottomInning;
         this.status.outs = 0;
+        this.status.runner1 = null;
+        this.status.runner2 = null;
+        this.status.runner3 = null;
+      }
 
-        return resultsLog;
+      return resultsLog;
+    },
+    advanceRunners: function(bID, outcome) {
+      console.log(bID, outcome);
+      let runsOnPlay = 0;
+
+      if (outcome === 'hbp' || outcome === 'walk') {
+        if (this.status.runner3 !== null && this.status.runner2 !== null && this.status.runner1 !== null) {
+          runsOnPlay = 1;
+          this.status.runner3 = this.status.runner2;
+          this.status.runner2 = this.status.runner1;
+          this.status.runner1 = bID;
+        } else if (this.status.runner2 !== null && this.status.runner1 !== null) {
+          this.status.runner3 = this.status.runner2;
+          this.status.runner2 = this.status.runner1;
+          this.status.runner1 = bID;
+        } else if (this.status.runner1 !== null) {
+          this.status.runner2 = this.status.runner1;
+          this.status.runner1 = bID;
+        } else {
+          this.status.runner1 = bID;
+        }
+      } else if (outcome === 'single') {
+        if (this.status.runner3 !== null) {
+          runsOnPlay++;
+          this.status.runner3 = null;
+        }
+
+        if (this.status.runner2 !== null) {
+          this.status.runner3 = this.status.runner2;
+          this.status.runner2 = null;
+        }
+
+        if (this.status.runner1 !== null) {
+          this.status.runner2 = this.status.runner1;
+          this.status.runner1 = null;
+        }
+
+        this.status.runner1 = bID;
+      } else if (outcome === 'double') {
+        runsOnPlay = Number(this.status.runner2 !== null) + Number(this.status.runner3 !== null);
+        this.status.runner3 = this.status.runner1;
+        this.status.runner2 = bID;
+      } else if (outcome === 'triple') {
+        runsOnPlay = Number(this.status.runner1 !== null) + Number(this.status.runner2 !== null) + Number(this.status.runner3 !== null);
+        this.status.runner3 = bID;
+      } else if (outcome === 'hr') {
+        runsOnPlay = 1 + Number(this.status.runner1 !== null) + Number(this.status.runner2 !== null) + Number(this.status.runner3 !== null);
+        this.status.runner1 = null;
+        this.status.runner2 = null;
+        this.status.runner3 = null;
+      } else if (outcome === 'bk') {
+        console.log("unsupported bk");
+      } else if (outcome === 'wp') {
+        console.log("unsupported wp");
+      }
+
+      if (runsOnPlay > 0) console.log('Scored', runsOnPlay);
+      if (this.status.bottomInning) {
+        this.status.homeScore += runsOnPlay;
+      } else {
+        this.status.visitorScore += runsOnPlay;
       }
     },
   };

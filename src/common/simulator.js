@@ -5,6 +5,7 @@ export const A_WHOLE_LOT = 50000;
 const BATTING_OUTCOMES = ['walk', 'hbp', 'k', 'go', 'fo', 'lo', 'single', 'double', 'triple', 'hr'];
 const PITCHING_OUTCOMES = ['go', 'fo', 'hbp', 'k', 'lo', 'walk', 'hr', 'single', 'double', 'triple', 'wp', 'bk'];
 const FIELDING_OUTCOMES = ['out'];
+export const OUT_TYPES = ['go', 'fo', 'k', 'lo'];
 
 export function simulateOutcomes(history, style, iterations) {
   let outcomeTypes;
