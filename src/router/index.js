@@ -23,6 +23,11 @@ const router = createRouter({
       name: "matchup_simulator",
       component: () => import("../views/MatchupSimulator.vue"),
     },
+    {
+      path: "/game_simulator",
+      name: "game_simulator",
+      component: () => import("../views/GameSimulator.vue"),
+    },
    ],
 });
 

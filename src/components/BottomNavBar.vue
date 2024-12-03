@@ -14,10 +14,17 @@
       </button>
     </router-link>
 
-    <router-link :to="{ name: 'matchup_simulator', params: { pitcher_id: 'snelb001', batter_id: 'hernt002' }}">
+    <router-link :to="{ name: 'matchup_simulator', params: { pitcher_id: 'coleg001', batter_id: 'hernt002' }}">
       <button type="button" class="active:outline-none focus:outline-none hover:outline-none border-none color-transparent bg-transparent inline-flex flex-col items-center justify-center mx-1 group stroke-stone-600 text-stone-600">
         <UserGroupIcon v-if="route.name === 'matchup_simulator'" class="w-6" />
         <UserGroupIconOutline v-else class="w-6" />
+      </button>
+    </router-link>
+
+    <router-link :to="{ name: 'game_simulator' }">
+      <button type="button" class="active:outline-none focus:outline-none hover:outline-none border-none color-transparent bg-transparent inline-flex flex-col items-center justify-center mx-1 group stroke-stone-600 text-stone-600">
+        <PlayCircleIcon v-if="route.name === 'game_simulator'" class="w-6" />
+        <PlayCircleIconOutline v-else class="w-6" />
       </button>
     </router-link>
   </div>
@@ -31,6 +38,8 @@ import { MagnifyingGlassCircleIcon } from "@heroicons/vue/24/solid";
 import { MagnifyingGlassCircleIcon as MagnifyingGlassCircleIconOutline } from "@heroicons/vue/24/outline";
 import { UserGroupIcon } from "@heroicons/vue/24/solid";
 import { UserGroupIcon as UserGroupIconOutline } from "@heroicons/vue/24/outline";
+import { PlayCircleIcon } from "@heroicons/vue/24/solid";
+import { PlayCircleIcon as PlayCircleIconOutline } from "@heroicons/vue/24/outline";
 
 const route = useRoute();
 </script>
