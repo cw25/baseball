@@ -22,5 +22,5 @@ import { OUT_TYPES } from '../common/simulator.js';
 import ScrollSpacer from '@/components/ScrollSpacer.vue';
 
 let game = newGame();
-let simGame = await game.simulateHalfInning();
+let simGame = await game.simulateGame();
 </script>

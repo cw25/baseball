@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-import DatabaseballLogo from "@/components/DatabaseballLogo.vue";
 import BottomNavBar from '@/components/BottomNavBar.vue';
 import { waitOnDB } from '@/common/queries.js';
 await waitOnDB();

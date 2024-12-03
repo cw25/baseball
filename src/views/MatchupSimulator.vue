@@ -20,7 +20,7 @@
 <script setup>
 import { reactive } from 'vue';
 import { useRoute } from 'vue-router';
-import { playerByID, battingOutcomesByPlayerID, pitchingOutcomesByPlayerIDs } from '../common/queries.js';
+import { playerByID, battingOutcomesByPlayerIDs, pitchingOutcomesByPlayerIDs } from '../common/queries.js';
 import { A_WHOLE_LOT, simulateMatchupOutcomes } from '../common/simulator.js';
 import PlayerMatchupHeader from '../components/PlayerMatchupHeader.vue';
 
@@ -43,7 +43,8 @@ let pitcherOutcomes = await pitchingOutcomesByPlayerIDs([route.params.pitcher_id
 pitcherOutcomes = pitcherOutcomes[route.params.pitcher_id];
 
 let batter = await playerByID(route.params.batter_id);
-const batterOutcomes = await battingOutcomesByPlayerID(route.params.batter_id);
+let batterOutcomes = await battingOutcomesByPlayerIDs([route.params.batter_id]);
+batterOutcomes = batterOutcomes[route.params.batter_id];
 
 const runSimulator = () => {
   state.simulatedOutcomes = simulateMatchupOutcomes(pitcherOutcomes, batterOutcomes, iterations);

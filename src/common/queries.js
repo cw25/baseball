@@ -62,13 +62,14 @@ export const battingStatsByPlayerID = async (playerID) => {
   return res?.at(0);
 }
 
-export const battingOutcomesByPlayerID = async (playerID) => {
-  let res = await genericQuery(`
+export const battingOutcomesByPlayerIDs = async (playerIDs) => {
+  let res = await queryToHash(`
     WITH regular_season_games AS (
       SELECT gid FROM read_parquet('gameinfo_file') WHERE gametype = 'regular'
     )
 
     SELECT
+      batter,
       ROUND(SUM(walk) / SUM(pa), 6) AS walk_pcg,
       ROUND(SUM(hbp) / SUM(pa), 6) AS hbp_pcg,
       ROUND(SUM((k AND NOT k_safe)::int) / SUM(pa), 6) AS k_pcg,
@@ -83,12 +84,12 @@ export const battingOutcomesByPlayerID = async (playerID) => {
     FROM read_parquet('plays_file')
     WHERE
       pa = 1
-      AND batter = '${playerID}'
+      AND batter IN ('${ playerIDs.join("', '") }')
       AND gid IN ( SELECT gid FROM regular_season_games )
       AND NOT (di OR oa OR sh OR xi OR e1 OR e2 OR e3 OR e4 OR e5 OR e6 OR e7 OR e8 OR e9)
-    LIMIT 1
-  `);
-  return res?.at(0);
+    GROUP BY batter
+  `, 'batter');
+  return res;
 }
 
 export const pitchingStatsByPlayerID = async (playerID) => {

@@ -1,4 +1,4 @@
-import { pitchingOutcomesByPlayerIDs, battingOutcomesByPlayerID } from "./queries";
+import { pitchingOutcomesByPlayerIDs, battingOutcomesByPlayerIDs } from "./queries";
 import { OUT_TYPES, simulateMatchup } from "./simulator";
 
 export function newGame() {
@@ -48,10 +48,16 @@ export function newGame() {
     simulateAtBat: async function(pitcher, batter) {
       return simulateMatchup(pitcher, batter);
     },
-    simulateHalfInning: async function() {
+    simulateGame: async function() {
       let pID, bID, pitcher, batter, outcome;
       let resultsLog = [];
 
+      let pitchers = await pitchingOutcomesByPlayerIDs([this.visitorLineup.P.id, this.homeLineup.P.id]);
+      let batters = await battingOutcomesByPlayerIDs([...this.visitorLineup.battingOrder, ...this.homeLineup.battingOrder]);
+
+
+      // TODO: Extra innings, (incl ghost runners)
+      // TODO: Walk-off conditions
       while (this.status.inning <= 9) {
         while (this.status.outs < 3) {
           if (this.status.bottomInning) {
@@ -62,9 +68,9 @@ export function newGame() {
             bID = this.visitorLineup.battingOrder[this.status.visitorBattingOrderIndex];
           }
 
-          pitcher = await pitchingOutcomesByPlayerIDs([pID]);
-          pitcher = pitcher[pID];
-          batter = await battingOutcomesByPlayerID(bID);
+          pitcher = pitchers[pID];
+          batter = batters[bID];
+
           outcome = await this.simulateAtBat(pitcher, batter);
 
           let result = [this.status.inning, this.status.outs, this.status.bottomInning, bID, outcome];
