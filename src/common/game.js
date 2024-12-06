@@ -44,6 +44,7 @@ export function newGame() {
       homeScore: 0,
       visitorBattingOrderIndex: 0,
       homeBattingOrderIndex: 0,
+      gameOver: false,
     },
     simulateAtBat: async function(pitcher, batter) {
       return simulateMatchup(pitcher, batter);
@@ -54,7 +55,6 @@ export function newGame() {
 
       let pitchers = await pitchingOutcomesByPlayerIDs([this.visitorLineup.P.id, this.homeLineup.P.id]);
       let batters = await battingOutcomesByPlayerIDs([...this.visitorLineup.battingOrder, ...this.homeLineup.battingOrder]);
-
 
       // TODO: Extra innings, (incl ghost runners)
       // TODO: Walk-off conditions
@@ -72,6 +72,7 @@ export function newGame() {
           batter = batters[bID];
 
           outcome = await this.simulateAtBat(pitcher, batter);
+          // TODO: These sometimes produce balks and WPs, which shouldn't advance batting order
 
           let result = [this.status.inning, this.status.outs, this.status.bottomInning, bID, outcome];
           let resultID = result.join('-');
@@ -100,11 +101,15 @@ export function newGame() {
         this.status.runner3 = null;
       }
 
+      this.gameOver = true;
       return resultsLog;
     },
     advanceRunners: function(bID, outcome) {
       console.log(bID, outcome);
       let runsOnPlay = 0;
+
+      // TODO: Running rules for non-force plays, taking into account ball locations, etc
+      // TODO: Manager-called steals
 
       if (outcome === 'hbp' || outcome === 'walk') {
         if (this.status.runner3 !== null && this.status.runner2 !== null && this.status.runner1 !== null) {

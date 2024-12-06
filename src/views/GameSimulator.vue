@@ -1,11 +1,11 @@
 <template>
-  <div v-for="outcome in simGame" :key="outcome[0]">
+  <div v-for="outcome in simGame" :key="outcome[0]" class="text-left">
     <span :class="!OUT_TYPES.includes(outcome[5]) ? 'font-bold': ''">
       {{ outcome[0] }}
     </span>
   </div>
 
-  <div class="text-2xl font-bold">
+  <div v-if="game.gameOver" class="text-2xl font-bold">
     Final Score
     <br />
     {{ game.visitorTeam }} {{ game.status.visitorScore }}
