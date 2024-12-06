@@ -46,13 +46,12 @@ export function newGame() {
       homeBattingOrderIndex: 0,
       gameOver: false,
     },
+    resultsLog: [],
     simulateAtBat: async function(pitcher, batter) {
       return simulateMatchup(pitcher, batter);
     },
     simulateGame: async function() {
       let pID, bID, pitcher, batter, outcome;
-      let resultsLog = [];
-
       let pitchers = await pitchingOutcomesByPlayerIDs([this.visitorLineup.P.id, this.homeLineup.P.id]);
       let batters = await battingOutcomesByPlayerIDs([...this.visitorLineup.battingOrder, ...this.homeLineup.battingOrder]);
 
@@ -74,13 +73,13 @@ export function newGame() {
           outcome = await this.simulateAtBat(pitcher, batter);
           // TODO: These sometimes produce balks and WPs, which shouldn't advance batting order
 
-          let result = [this.status.inning, this.status.outs, this.status.bottomInning, bID, outcome];
+          let result = [this.status.inning, this.status.outs, this.status.bottomInning ? 'home' : 'visitor', bID, outcome];
           let resultID = result.join('-');
-          resultsLog.push([resultID, ...result]);
 
           if (OUT_TYPES.includes(outcome)) {
             this.status.outs += 1;
           } else {
+            this.resultsLog.push([resultID, ...result]);
             this.advanceRunners(bID, outcome);
           }
 
@@ -101,11 +100,10 @@ export function newGame() {
         this.status.runner3 = null;
       }
 
-      this.gameOver = true;
-      return resultsLog;
+      this.status.gameOver = true;
+      return this.resultsLog;
     },
     advanceRunners: function(bID, outcome) {
-      console.log(bID, outcome);
       let runsOnPlay = 0;
 
       // TODO: Running rules for non-force plays, taking into account ball locations, etc
@@ -162,11 +160,12 @@ export function newGame() {
         console.log("unsupported wp");
       }
 
-      if (runsOnPlay > 0) console.log('Scored', runsOnPlay);
       if (this.status.bottomInning) {
         this.status.homeScore += runsOnPlay;
-      } else {
+        if (runsOnPlay > 0) this.resultsLog.push([`${this.status.inning}-${this.status.outs}-${this.homeTeam}-SCORED-${runsOnPlay}`]);
+        } else {
         this.status.visitorScore += runsOnPlay;
+        if (runsOnPlay > 0) this.resultsLog.push([`${this.status.inning}-${this.status.outs}-${this.visitorTeam}-SCORED-${runsOnPlay}`]);
       }
     },
   };
