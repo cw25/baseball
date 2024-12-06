@@ -1,10 +1,12 @@
 import { pitchingOutcomesByPlayerIDs, battingOutcomesByPlayerIDs } from "./queries";
 import { OUT_TYPES, simulateMatchup } from "./simulator";
 
-export function newGame() {
-  return {
+export async function newGame() {
+  let game = {
     homeTeam: 'LAN',
     visitorTeam: 'CIN',
+    allPitchers: {},
+    allBatters: {},
     homeLineup: {
       "P": { id: 'sheee001' },
       "C": { id: 'smitw003' },
@@ -47,61 +49,65 @@ export function newGame() {
       gameOver: false,
     },
     resultsLog: [],
-    simulateAtBat: async function(pitcher, batter) {
-      return simulateMatchup(pitcher, batter);
-    },
-    simulateGame: async function() {
+    simulateAtBat: async function() {
       let pID, bID, pitcher, batter, outcome;
-      let pitchers = await pitchingOutcomesByPlayerIDs([this.visitorLineup.P.id, this.homeLineup.P.id]);
-      let batters = await battingOutcomesByPlayerIDs([...this.visitorLineup.battingOrder, ...this.homeLineup.battingOrder]);
 
-      // TODO: Extra innings, (incl ghost runners)
-      // TODO: Walk-off conditions
-      while (this.status.inning <= 9) {
-        while (this.status.outs < 3) {
-          if (this.status.bottomInning) {
-            pID = this.visitorLineup.P.id;
-            bID = this.homeLineup.battingOrder[this.status.homeBattingOrderIndex];
-          } else {
-            pID = this.homeLineup.P.id;
-            bID = this.visitorLineup.battingOrder[this.status.visitorBattingOrderIndex];
-          }
+      if (this.status.bottomInning) {
+        pID = this.visitorLineup.P.id;
+        bID = this.homeLineup.battingOrder[this.status.homeBattingOrderIndex];
+      } else {
+        pID = this.homeLineup.P.id;
+        bID = this.visitorLineup.battingOrder[this.status.visitorBattingOrderIndex];
+      }
 
-          pitcher = pitchers[pID];
-          batter = batters[bID];
+      pitcher = this.allPitchers[pID];
+      batter = this.allBatters[bID];
 
-          outcome = await this.simulateAtBat(pitcher, batter);
-          // TODO: These sometimes produce balks and WPs, which shouldn't advance batting order
+      outcome = simulateMatchup(pitcher, batter);
+      // TODO: These sometimes produce balks and WPs, which shouldn't advance batting order
 
-          let result = [this.status.inning, this.status.outs, this.status.bottomInning ? 'home' : 'visitor', bID, outcome];
-          let resultID = result.join('-');
+      let result = [this.status.inning, this.status.outs, this.status.bottomInning ? 'home' : 'visitor', bID, outcome];
+      let resultID = result.join('-');
 
-          if (OUT_TYPES.includes(outcome)) {
-            this.status.outs += 1;
-          } else {
-            this.resultsLog.push([resultID, ...result]);
-            this.advanceRunners(bID, outcome);
-          }
+      if (OUT_TYPES.includes(outcome)) {
+        this.status.outs++;
+      } else {
+        this.resultsLog.push([resultID, ...result]);
+        this.advanceRunners(bID, outcome);
+      }
 
-          if (this.status.bottomInning) {
-            this.status.homeBattingOrderIndex = (this.status.homeBattingOrderIndex + 1) % 9;
-          } else {
-            this.status.visitorBattingOrderIndex = (this.status.visitorBattingOrderIndex + 1) %9;
-          }
+      if (this.status.bottomInning) {
+        this.status.homeBattingOrderIndex = (this.status.homeBattingOrderIndex + 1) % 9;
+      } else {
+        this.status.visitorBattingOrderIndex = (this.status.visitorBattingOrderIndex + 1) %9;
+      }
+    },
+    simulateGameStep: async function() {
+      this.simulateAtBat();
+
+      if (this.status.outs === 3) {
+        if (this.status.inning === 9 && this.status.bottomInning) {
+          this.status.gameOver = true;
+          return;
         }
 
         if (this.status.bottomInning) {
           this.status.inning++;
         }
+
         this.status.bottomInning = !this.status.bottomInning;
         this.status.outs = 0;
         this.status.runner1 = null;
         this.status.runner2 = null;
         this.status.runner3 = null;
       }
-
-      this.status.gameOver = true;
-      return this.resultsLog;
+    },
+    simulateGame: async function() {
+      // TODO: Extra innings, (incl ghost runners)
+      // TODO: Walk-off conditions
+      while (!this.status.gameOver) {
+        this.simulateGameStep();
+      }
     },
     advanceRunners: function(bID, outcome) {
       let runsOnPlay = 0;
@@ -171,4 +177,10 @@ export function newGame() {
       }
     },
   };
+
+  // do preflight player lookups to save db query time
+  game.allPitchers = await pitchingOutcomesByPlayerIDs([game.visitorLineup.P.id, game.homeLineup.P.id]);
+  game.allBatters = await battingOutcomesByPlayerIDs([...game.visitorLineup.battingOrder, ...game.homeLineup.battingOrder]);
+
+  return game;
 }

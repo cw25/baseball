@@ -1,5 +1,5 @@
 <template>
-  <div v-if="state.game.status.gameOver" class="text-2xl font-bold">
+  <div v-if="state.game.resultsLog" class="text-2xl font-bold">
     Final Score
     <br />
     {{ state.game.visitorTeam }} {{ state.game.status.visitorScore }}
@@ -19,7 +19,7 @@
   </div>
 
   <div class="mt-4">
-    <div v-for="outcome in state.gameOutcomes" :key="outcome[0]" class="text-left">
+    <div v-for="outcome in state.game.resultsLog" :key="outcome[0]" class="text-left">
       <span :class="!OUT_TYPES.includes(outcome[5]) ? 'font-bold': ''">
         {{ outcome[0] }}
       </span>
@@ -38,13 +38,12 @@ import BoxScore from '@/components/BoxScore.vue';
 
 const state = reactive({
   game: {},
-  gameOutcomes: [],
 });
 
 const runSimulator = async () => {
-  state.game = newGame();
-  state.gameOutcomes = await state.game.simulateGame();
+  state.game = await newGame();
+  await state.game.simulateGame();
 };
 
-runSimulator();
+await runSimulator();
 </script>
