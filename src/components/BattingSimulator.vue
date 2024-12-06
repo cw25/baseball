@@ -3,7 +3,7 @@
     Simulate Batting
     <button
       @click="runSimulator()"
-      class="text-xs bg-dodgerblue text-white ml-2 p-0.5 px-3"
+      class="text-xs bg-dodgerblue text-white ml-2 p-0.5 px-3 rounded-md"
     >
       Simulate {{ iterations }} PAs
     </button>

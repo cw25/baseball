@@ -3,7 +3,7 @@
 
   <button
       @click="runSimulator()"
-      class="text-xs bg-dodgerblue text-white ml-2 p-0.5 px-3 mt-4"
+      class="text-xs bg-dodgerblue text-white ml-2 p-0.5 px-3 mt-4 rounded-md"
     >
       Simulate {{ iterations }} PAs
   </button>

@@ -9,10 +9,12 @@ export default {
       },
       strokeWidth: {
         'homeicon': '0.5px',
+      },
+      gridTemplateColumns: {
+        '24': 'repeat(24, minmax(0, 1fr))',
       }
     },
   },
   plugins: [],
   darkMode: false,
 }
-

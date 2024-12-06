@@ -38,8 +38,8 @@ export function newGame() {
       inning: 1,
       bottomInning: false,
       outs: 0,
-      visitorScoring: [],
-      homeScoring: [],
+      visitorScoring: [0,0,0,0,0,0,0,0,0],
+      homeScoring: [0,0,0,0,0,0,0,0,0],
       visitorScore: 0,
       homeScore: 0,
       visitorBattingOrderIndex: 0,
@@ -162,9 +162,11 @@ export function newGame() {
 
       if (this.status.bottomInning) {
         this.status.homeScore += runsOnPlay;
+        this.status.homeScoring[this.status.inning - 1] += runsOnPlay;
         if (runsOnPlay > 0) this.resultsLog.push([`${this.status.inning}-${this.status.outs}-${this.homeTeam}-SCORED-${runsOnPlay}`]);
         } else {
         this.status.visitorScore += runsOnPlay;
+        this.status.visitorScoring[this.status.inning - 1] += runsOnPlay;
         if (runsOnPlay > 0) this.resultsLog.push([`${this.status.inning}-${this.status.outs}-${this.visitorTeam}-SCORED-${runsOnPlay}`]);
       }
     },
